@@ -8,9 +8,9 @@
     "clean": "rimraf ./build",
     "mkdirs": "mkdir build",
     "copy:assets": "cp -r src/* build",
-    "compile": "npm run copy:assets && tsc",
+    "compile": "npm run copy:assets",
     "zip": "gulp",
-    "build": "npm run clean && npm run mkdirs && npm run compile && npm test && npm run zip"
+    "build": "npm run clean && npm run mkdirs && npm run compile && npm run zip"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-tap": "^2.0.0",
-    "gulp-zip": "^5.0.1"
+    "gulp-zip": "^5.0.1",
+    "rimraf": "^3.0.2"
   }
 }

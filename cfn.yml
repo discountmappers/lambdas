@@ -1,0 +1,57 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Discount Mappers
+
+Globals:
+  # global values for lambdas
+  Function:
+    Runtime: nodejs12.x
+
+Resources:
+  # Lambda functions
+  DiscountMappersApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "discount-mappers-api"
+      StageName: PROD
+      EndpointConfiguration: REGIONAL
+      DefinitionBody:
+        swagger: 2.0
+        info:
+          title: "Discount Mappers"
+          description: "supporting services for discount mappers"
+        paths:
+          /v1/discounts/{discountId}:
+            get:
+              tags:
+                - "GetDiscounts"
+              x-amazon-apigateway-integration:
+                credentials: !Sub arn:aws:iam::${AWS::AccountId}:role/discount-mappers-lambda-role
+                httpMethod: POST
+                type: aws_proxy
+              produces:
+                - "application/json"
+              parameters:
+                - in: "path"
+                  name: "discountId"
+                  required: true
+                  type: "string"
+          /v1/publish-discount:
+            post:
+              tags:
+                - "PublishEventMessage"
+              x-amazon-apigateway-integration:
+                credentials: !Sub arn:aws:iam::${AWS::AccountId}:role/discount-mappers-lambda-role
+                httpMethod: POST
+                type: aws_proxy
+              parameters:
+                - in: "body"
+                  name: "event"
+                  required: true
+                  schema:
+                    type: object
+                    required:
+                      - discount
+                    properties:
+                      discount:
+                        type: object
