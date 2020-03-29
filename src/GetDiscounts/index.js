@@ -8,11 +8,7 @@ exports.handler = async event => {
     };
     try {
         const data = await dynamo.scan(params).promise();
-        const response = {
-            statusCode: 200,
-            body: JSON.stringify(data.Items)
-        }
-        return response;
+        return data.Items;
     } catch(e) {
         console.log("Error getting items from dynamo: " + e);
         return {
